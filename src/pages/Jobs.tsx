@@ -59,24 +59,24 @@ export default function Jobs() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold">Job Portal</h1>
-            <p className="text-muted-foreground mt-1">Explore opportunities from the alumni network</p>
+            <h1 className="text-2xl font-display">Job Portal</h1>
+            <p className="text-sm text-muted-foreground mt-1">Opportunities from the JUIT network</p>
           </div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="gradient-primary"><Plus className="h-4 w-4 mr-2" />Post Job</Button>
+              <Button className="gradient-navy text-primary-foreground" size="sm"><Plus className="h-4 w-4 mr-1.5" />Post Job</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader><DialogTitle className="font-display">Post a Job</DialogTitle></DialogHeader>
               <form onSubmit={handlePost} className="space-y-4">
-                <div className="space-y-2"><Label>Job Title *</Label><Input value={form.title} onChange={(e) => setForm(f => ({...f, title: e.target.value}))} required /></div>
-                <div className="space-y-2"><Label>Company *</Label><Input value={form.company} onChange={(e) => setForm(f => ({...f, company: e.target.value}))} required /></div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Location</Label><Input value={form.location} onChange={(e) => setForm(f => ({...f, location: e.target.value}))} /></div>
-                  <div className="space-y-2">
-                    <Label>Type</Label>
+                <div className="space-y-1.5"><Label className="text-xs">Job Title *</Label><Input value={form.title} onChange={(e) => setForm(f => ({...f, title: e.target.value}))} required /></div>
+                <div className="space-y-1.5"><Label className="text-xs">Company *</Label><Input value={form.company} onChange={(e) => setForm(f => ({...f, company: e.target.value}))} required /></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5"><Label className="text-xs">Location</Label><Input value={form.location} onChange={(e) => setForm(f => ({...f, location: e.target.value}))} /></div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Type</Label>
                     <Select value={form.role_type} onValueChange={(v) => setForm(f => ({...f, role_type: v}))}>
-                      <SelectTrigger><SelectValue placeholder="Job type" /></SelectTrigger>
+                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Full-time">Full-time</SelectItem>
                         <SelectItem value="Part-time">Part-time</SelectItem>
@@ -87,46 +87,45 @@ export default function Jobs() {
                     </Select>
                   </div>
                 </div>
-                <div className="space-y-2"><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm(f => ({...f, description: e.target.value}))} rows={4} /></div>
-                <Button type="submit" className="w-full gradient-primary">Post Job</Button>
+                <div className="space-y-1.5"><Label className="text-xs">Description</Label><Textarea value={form.description} onChange={(e) => setForm(f => ({...f, description: e.target.value}))} rows={4} /></div>
+                <Button type="submit" className="w-full gradient-navy text-primary-foreground">Post Job</Button>
               </form>
             </DialogContent>
           </Dialog>
         </div>
 
-        {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input placeholder="Search jobs..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
           </div>
-          <Input placeholder="Filter by company" value={filterCompany} onChange={(e) => setFilterCompany(e.target.value)} />
-          <Input placeholder="Filter by location" value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} />
+          <Input placeholder="Company" value={filterCompany} onChange={(e) => setFilterCompany(e.target.value)} />
+          <Input placeholder="Location" value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} />
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading jobs...</div>
+          <div className="text-center py-12 text-muted-foreground text-sm">Loading jobs...</div>
         ) : jobs.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">No jobs posted yet.</div>
+          <div className="text-center py-12 text-muted-foreground text-sm">No jobs posted yet.</div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {jobs.map((job) => (
-              <Card key={job.id} className="shadow-soft hover:shadow-glow transition-shadow animate-fade-in">
-                <CardContent className="p-5">
-                  <div className="flex flex-col md:flex-row md:items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                      <Briefcase className="h-6 w-6 text-accent" />
+              <Card key={job.id} className="shadow-card border-border animate-fade-in">
+                <CardContent className="p-4">
+                  <div className="flex flex-col md:flex-row md:items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-md bg-accent/10 flex items-center justify-center">
+                      <Briefcase className="h-5 w-5 text-accent" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-display font-semibold text-lg">{job.title}</h3>
-                      <div className="flex flex-wrap gap-3 mt-1 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1"><Building className="h-3.5 w-3.5" />{job.company}</span>
-                        {job.location && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{job.location}</span>}
-                        <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{formatDistanceToNow(new Date(job.created_at), { addSuffix: true })}</span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm">{job.title}</h3>
+                      <div className="flex flex-wrap gap-3 mt-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1"><Building className="h-3 w-3" />{job.company}</span>
+                        {job.location && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{job.location}</span>}
+                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{formatDistanceToNow(new Date(job.created_at), { addSuffix: true })}</span>
                       </div>
-                      {job.description && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{job.description}</p>}
+                      {job.description && <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{job.description}</p>}
                     </div>
-                    {job.role_type && <Badge variant="secondary">{job.role_type}</Badge>}
+                    {job.role_type && <Badge variant="secondary" className="text-[10px] shrink-0">{job.role_type}</Badge>}
                   </div>
                 </CardContent>
               </Card>
