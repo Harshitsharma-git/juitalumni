@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import juitLogo from "@/assets/juit-logo.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,32 +30,31 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
-      <Card className="w-full max-w-md shadow-soft animate-fade-in">
-        <CardHeader className="text-center">
-          <Link to="/" className="inline-flex items-center justify-center gap-2 mb-4">
-            <GraduationCap className="h-8 w-8 text-primary" />
-            <span className="font-display font-bold text-xl">AlumniConnect</span>
+      <Card className="w-full max-w-sm shadow-soft animate-fade-in border-border">
+        <CardHeader className="text-center pb-4">
+          <Link to="/" className="inline-flex items-center justify-center gap-3 mb-2">
+            <img src={juitLogo} alt="JUIT" className="h-12 w-12" />
           </Link>
-          <CardTitle className="text-2xl font-display">Welcome Back</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle className="text-xl font-display">Welcome Back</CardTitle>
+          <CardDescription className="text-xs">Sign in to JUIT Alumni Network</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs">Email</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@juit.ac.in" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-xs">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" />
             </div>
-            <Button type="submit" className="w-full gradient-primary" disabled={loading}>
+            <Button type="submit" className="w-full gradient-navy text-primary-foreground" disabled={loading}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>
-          <p className="text-center text-sm text-muted-foreground mt-4">
+          <p className="text-center text-xs text-muted-foreground mt-4">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary font-medium hover:underline">Sign up</Link>
+            <Link to="/signup" className="text-accent font-medium hover:underline">Sign up</Link>
           </p>
         </CardContent>
       </Card>
