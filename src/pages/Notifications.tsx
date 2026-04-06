@@ -42,37 +42,37 @@ export default function Notifications() {
       <div className="space-y-6 max-w-2xl mx-auto">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold">Notifications</h1>
-            <p className="text-muted-foreground mt-1">{unreadCount} unread notification{unreadCount !== 1 ? "s" : ""}</p>
+            <h1 className="text-2xl font-display">Notifications</h1>
+            <p className="text-sm text-muted-foreground mt-1">{unreadCount} unread</p>
           </div>
           {unreadCount > 0 && (
-            <Button variant="outline" size="sm" onClick={markAllRead}>
-              <Check className="h-3.5 w-3.5 mr-1" />Mark all read
+            <Button variant="outline" size="sm" onClick={markAllRead} className="text-xs">
+              <Check className="h-3 w-3 mr-1" />Mark all read
             </Button>
           )}
         </div>
 
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading...</div>
+          <div className="text-center py-12 text-muted-foreground text-sm">Loading...</div>
         ) : notifications.length === 0 ? (
           <div className="text-center py-12">
-            <Bell className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground">No notifications yet.</p>
+            <Bell className="h-10 w-10 text-muted-foreground/20 mx-auto mb-3" />
+            <p className="text-sm text-muted-foreground">No notifications yet.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {notifications.map((n) => (
-              <Card key={n.id} className={`shadow-soft transition-all ${!n.read ? "border-primary/30 bg-primary/5" : ""}`}>
+              <Card key={n.id} className={`shadow-card border-border transition-all ${!n.read ? "border-accent/30 bg-accent/5" : ""}`}>
                 <CardContent className="p-4 flex items-start gap-3">
-                  <div className={`mt-1 w-2 h-2 rounded-full shrink-0 ${!n.read ? "gradient-primary" : "bg-muted"}`} />
+                  <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${!n.read ? "bg-accent" : "bg-muted"}`} />
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-sm">{n.title}</h3>
-                    {n.message && <p className="text-sm text-muted-foreground mt-0.5">{n.message}</p>}
-                    <p className="text-xs text-muted-foreground mt-1">{formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}</p>
+                    {n.message && <p className="text-xs text-muted-foreground mt-0.5">{n.message}</p>}
+                    <p className="text-[10px] text-muted-foreground mt-1">{formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}</p>
                   </div>
                   {!n.read && (
-                    <Button variant="ghost" size="sm" onClick={() => markRead(n.id)} className="shrink-0">
-                      <Check className="h-3.5 w-3.5" />
+                    <Button variant="ghost" size="sm" onClick={() => markRead(n.id)} className="shrink-0 h-7 w-7 p-0">
+                      <Check className="h-3 w-3" />
                     </Button>
                   )}
                 </CardContent>
