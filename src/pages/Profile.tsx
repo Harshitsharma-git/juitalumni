@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Camera, Loader2, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const departments = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Business Administration", "Arts & Humanities", "Medicine", "Law", "Science", "Other"];
+const departments = ["Computer Science & Engineering", "Electronics & Communication", "Biotechnology", "Bioinformatics", "Civil Engineering", "Mathematics", "Physics", "Chemistry", "Humanities & Social Sciences", "Management", "Other"];
 
 export default function Profile() {
   const { user, profile, refreshProfile } = useAuth();
@@ -21,13 +21,9 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
-    name: profile?.name ?? "",
-    bio: profile?.bio ?? "",
-    graduation_year: profile?.graduation_year?.toString() ?? "",
-    department: profile?.department ?? "",
-    job_title: profile?.job_title ?? "",
-    company: profile?.company ?? "",
-    location: profile?.location ?? "",
+    name: profile?.name ?? "", bio: profile?.bio ?? "",
+    graduation_year: profile?.graduation_year?.toString() ?? "", department: profile?.department ?? "",
+    job_title: profile?.job_title ?? "", company: profile?.company ?? "", location: profile?.location ?? "",
   });
 
   const update = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
@@ -36,13 +32,10 @@ export default function Profile() {
     e.preventDefault();
     setSaving(true);
     const { error } = await supabase.from("profiles").update({
-      name: form.name,
-      bio: form.bio || null,
+      name: form.name, bio: form.bio || null,
       graduation_year: form.graduation_year ? parseInt(form.graduation_year) : null,
-      department: form.department || null,
-      job_title: form.job_title || null,
-      company: form.company || null,
-      location: form.location || null,
+      department: form.department || null, job_title: form.job_title || null,
+      company: form.company || null, location: form.location || null,
     }).eq("user_id", user!.id);
     setSaving(false);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
@@ -70,54 +63,49 @@ export default function Profile() {
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-2xl md:text-3xl font-display font-bold">My Profile</h1>
+        <h1 className="text-2xl font-display">My Profile</h1>
 
-        {/* Avatar */}
-        <Card className="shadow-soft">
-          <CardContent className="flex items-center gap-6 p-6">
+        <Card className="shadow-card border-border">
+          <CardContent className="flex items-center gap-5 p-5">
             <div className="relative">
-              <Avatar className="h-20 w-20 border-2 border-primary/20">
+              <Avatar className="h-16 w-16 border border-border">
                 <AvatarImage src={profile?.profile_image ?? undefined} />
-                <AvatarFallback className="gradient-primary text-primary-foreground font-display text-xl font-bold">{initials}</AvatarFallback>
+                <AvatarFallback className="gradient-navy text-primary-foreground font-display text-lg">{initials}</AvatarFallback>
               </Avatar>
-              <button
-                onClick={() => fileRef.current?.click()}
-                className="absolute -bottom-1 -right-1 p-1.5 rounded-full gradient-primary text-primary-foreground shadow-soft"
-                disabled={uploading}
-              >
-                {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Camera className="h-3.5 w-3.5" />}
+              <button onClick={() => fileRef.current?.click()} disabled={uploading}
+                className="absolute -bottom-1 -right-1 p-1.5 rounded-full gradient-gold text-accent-foreground shadow-card">
+                {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Camera className="h-3 w-3" />}
               </button>
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
             </div>
             <div>
-              <h2 className="font-display font-semibold text-lg">{profile?.name || "Your Name"}</h2>
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
+              <h2 className="font-display text-lg">{profile?.name || "Your Name"}</h2>
+              <p className="text-xs text-muted-foreground">{profile?.email}</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Form */}
-        <Card className="shadow-soft">
-          <CardHeader><CardTitle className="font-display">Edit Profile</CardTitle></CardHeader>
+        <Card className="shadow-card border-border">
+          <CardHeader><CardTitle className="font-display text-lg">Edit Profile</CardTitle></CardHeader>
           <CardContent>
             <form onSubmit={handleSave} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Full Name</Label><Input value={form.name} onChange={(e) => update("name", e.target.value)} /></div>
-                <div className="space-y-2"><Label>Graduation Year</Label><Input type="number" value={form.graduation_year} onChange={(e) => update("graduation_year", e.target.value)} min={1950} max={2030} /></div>
-                <div className="space-y-2">
-                  <Label>Department</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5"><Label className="text-xs">Full Name</Label><Input value={form.name} onChange={(e) => update("name", e.target.value)} /></div>
+                <div className="space-y-1.5"><Label className="text-xs">Graduation Year</Label><Input type="number" value={form.graduation_year} onChange={(e) => update("graduation_year", e.target.value)} min={2002} max={2030} /></div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Department</Label>
                   <Select value={form.department} onValueChange={(v) => update("department", v)}>
-                    <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
                     <SelectContent>{departments.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-2"><Label>Job Title</Label><Input value={form.job_title} onChange={(e) => update("job_title", e.target.value)} /></div>
-                <div className="space-y-2"><Label>Company</Label><Input value={form.company} onChange={(e) => update("company", e.target.value)} /></div>
-                <div className="space-y-2"><Label>Location</Label><Input value={form.location} onChange={(e) => update("location", e.target.value)} /></div>
+                <div className="space-y-1.5"><Label className="text-xs">Job Title</Label><Input value={form.job_title} onChange={(e) => update("job_title", e.target.value)} /></div>
+                <div className="space-y-1.5"><Label className="text-xs">Company</Label><Input value={form.company} onChange={(e) => update("company", e.target.value)} /></div>
+                <div className="space-y-1.5"><Label className="text-xs">Location</Label><Input value={form.location} onChange={(e) => update("location", e.target.value)} /></div>
               </div>
-              <div className="space-y-2"><Label>Bio</Label><Textarea value={form.bio} onChange={(e) => update("bio", e.target.value)} rows={3} placeholder="Tell us about yourself..." /></div>
-              <Button type="submit" className="gradient-primary" disabled={saving}>
-                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+              <div className="space-y-1.5"><Label className="text-xs">Bio</Label><Textarea value={form.bio} onChange={(e) => update("bio", e.target.value)} rows={3} placeholder="Tell us about yourself..." /></div>
+              <Button type="submit" className="gradient-navy text-primary-foreground" disabled={saving}>
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Save className="h-4 w-4 mr-1.5" />}
                 Save Changes
               </Button>
             </form>
