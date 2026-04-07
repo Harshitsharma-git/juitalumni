@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
       email: u.email, password: 'Alumni@2024', email_confirm: true,
       user_metadata: { name: u.name }
     });
-    if (error) { failed++; continue; }
+    if (error) { console.error(`Failed ${u.email}: ${error.message}`); failed++; continue; }
     await supabase.from('profiles').update({
       graduation_year: u.year, department: u.dept, job_title: u.title,
       company: u.company, location: u.loc, bio: u.bio,
