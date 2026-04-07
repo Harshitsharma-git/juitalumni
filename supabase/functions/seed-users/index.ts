@@ -72,21 +72,23 @@ Deno.serve(async (req) => {
     { name: 'Raghav Mittal', email: 'raghav.mittal@juit.ac.in', year: 2013, dept: 'Computer Science & Engineering', title: 'Principal Consultant', company: 'Deloitte', loc: 'Mumbai', bio: 'Digital transformation.' },
   ];
 
-  let success = 0, failed = 0;
+  // Update profiles for already-existing users by email
+  let updated = 0, errors = 0;
   for (const u of users) {
-    const { data, error } = await supabase.auth.admin.createUser({
-      email: u.email, password: 'Alumni@2024', email_confirm: true,
-      user_metadata: { name: u.name }
-    });
-    if (error) { console.error(`Failed ${u.email}: ${error.message}`); failed++; continue; }
-    await supabase.from('profiles').update({
-      graduation_year: u.year, department: u.dept, job_title: u.title,
-      company: u.company, location: u.loc, bio: u.bio,
-    }).eq('user_id', data.user.id);
-    success++;
+    const { error } = await supabase.from('profiles').update({
+      name: u.name,
+      graduation_year: u.year,
+      department: u.dept,
+      job_title: u.title,
+      company: u.company,
+      location: u.loc,
+      bio: u.bio,
+    }).eq('email', u.email);
+    if (error) { console.error(`Update failed ${u.email}: ${error.message}`); errors++; }
+    else { updated++; }
   }
 
-  return new Response(JSON.stringify({ success, failed }), {
+  return new Response(JSON.stringify({ updated, errors }), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
